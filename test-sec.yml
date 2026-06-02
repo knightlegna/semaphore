@@ -1,6 +1,6 @@
 ---
 - name: Hardening Básico para AlmaLinux
-  hosts: [website]
+  hosts: all
   become: yes
   vars:
     ssh_port: "2222"
