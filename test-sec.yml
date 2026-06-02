@@ -6,6 +6,11 @@
     ssh_port: "2222"
 
   tasks:
+    - name: Ensure Apache is installed
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+        
     - name: Actualizar todos los paquetes del sistema a la última versión
       ansible.builtin.dnf:
         name: "*"
