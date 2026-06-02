@@ -7,7 +7,7 @@
 
   tasks:
     - name: Ensure Apache is installed
-      ansible.builtin.apt:
+      ansible.builtin.dnf:
         name: apache2
         state: present
         
