@@ -7,7 +7,7 @@
 
   tasks:
     - name: Actualizar todos los paquetes del sistema a la última versión
-      dnf:
+      ansible.builtin.dnf:
         name: "*"
         state: latest
         update_cache: yes
