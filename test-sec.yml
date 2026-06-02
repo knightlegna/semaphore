@@ -4,7 +4,6 @@
   become: yes
   vars:
     ssh_port: "2222"
-    allowed_ssh_users: "ometeotl"
 
   tasks:
     - name: Actualizar todos los paquetes del sistema a la última versión
@@ -25,7 +24,6 @@
         - { regexp: '^#?PermitRootLogin', line: 'PermitRootLogin no' }
         - { regexp: '^#?X11Forwarding', line: 'X11Forwarding no' }
         - { regexp: '^#?MaxAuthTries', line: 'MaxAuthTries 3' }
-        - { regexp: '^#?AllowUsers', line: 'AllowUsers {{ allowed_ssh_users }}' }
       notify: Restart SSH
 
     - name: Asegurar que firewalld esté activo y habilitado
