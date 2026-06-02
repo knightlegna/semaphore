@@ -1,8 +1,7 @@
 ---
 - name: Hardening Básico para AlmaLinux
   hosts: all
-  become: yes
-  become_user: ometeotl
+  become: true
   vars:
     ssh_port: "2222"
 
