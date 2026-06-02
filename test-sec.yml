@@ -58,7 +58,7 @@
         state: present
 
     - name: Asegurar que Fail2Ban esté corriendo y habilitado
-      systemfile:
+      service:
         name: fail2ban
         state: started
         enabled: yes
