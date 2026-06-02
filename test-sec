@@ -72,16 +72,6 @@
         opts: defaults,nodev,nosuid,noexec
         state: mounted
 
-    - name: Configurar envejecimiento de contraseñas en /etc/login.defs
-      lineinfile:
-        path: /etc/login.defs
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      loop:
-        - { regexp: '^PASS_MAX_DAYS', line: 'PASS_MAX_DAYS 90' }
-        - { regexp: '^PASS_MIN_DAYS', line: 'PASS_MIN_DAYS 7' }
-        - { regexp: '^PASS_WARN_AGE', line: 'PASS_WARN_AGE 14' }
-
 
   handlers:
     - name: Restart SSH
