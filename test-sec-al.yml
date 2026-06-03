@@ -4,7 +4,7 @@
   become: true
   vars:
 #    admin_users:
-#      - ansible
+#      - ometeotl
 
   tasks:
     - name: Asegurar que todos los paquetes estén actualizados a la última versión de seguridad
@@ -49,7 +49,7 @@
 
  
   handlers:
-    - name: Restart SSH
+    - name: Reiniciar SSH
       systemd:
         name: sshd
         state: restarted
