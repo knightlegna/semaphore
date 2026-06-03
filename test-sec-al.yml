@@ -3,8 +3,8 @@
   hosts: all
   become: true
   vars:
- #   admin_users:
- #     - ansible
+    admin_users:
+      - root
     ssh_port: "2222"
 
   tasks:
