@@ -1,0 +1,76 @@
+---
+- name: Playbook de Seguridad y Hardening para AlmaLinux
+  hosts: almalinux
+  become: true
+  vars:
+    admin_users:
+      - ometeotl
+    ssh_port: "2222"
+
+  tasks:
+    - name: Asegurar que todos los paquetes estén actualizados a la última versión de seguridad
+      dnf:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Configurar parámetros seguros en SSH daemon
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+        validate: '/usr/sbin/sshd -t -f %s'
+      loop:
+        - { regexp: '^#?Port ', line: 'Port {{ ssh_port }}' }
+        - { regexp: '^#?PermitRootLogin ', line: 'PermitRootLogin no' }
+        - { regexp: '^#?X11Forwarding ', line: 'X11Forwarding no' }
+        - { regexp: '^#?MaxAuthTries ', line: 'MaxAuthTries 3' }
+        - { regexp: '^#?ClientAliveInterval ', line: 'ClientAliveInterval 300' }
+        - { regexp: '^#?ClientAliveCountMax ', line: 'ClientAliveCountMax 2' }
+      notify: Restart SSH
+
+    - name: Asegurar que Firewalld esté instalado y activo
+      dnf:
+        name: firewalld
+        state: present
+
+    - name: Iniciar y habilitar servicio Firewalld
+      systemd:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Permitir el nuevo puerto SSH en el Firewall
+      firewalld:
+        port: "{{ ssh_port }}/tcp"
+        zone: public
+        permanent: true
+        state: enabled
+
+    - name: Remover el puerto SSH por defecto (22)
+      firewalld:
+        service: ssh
+        zone: public
+        permanent: true
+        state: disabled
+      when: ssh_port != "22"
+      notify: Reload Firewall
+
+    - name: Asegurar que el servicio Auditd esté activo para auditoría de eventos
+      systemd:
+        name: auditd
+        state: started
+        enabled: true
+
+ 
+  handlers:
+    - name: Restart SSH
+      systemd:
+        name: sshd
+        state: restarted
+
+    - name: Reload Firewall
+      systemd:
+        name: firewalld
+        state: reloaded
