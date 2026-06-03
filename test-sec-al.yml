@@ -13,6 +13,7 @@
         name: "*"
         state: latest
         update_cache: true
+        become: true
 
     - name: Configurar parámetros seguros en SSH daemon
       lineinfile:
