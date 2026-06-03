@@ -3,9 +3,8 @@
   hosts: all
   become: true
   vars:
-    admin_users:
-      - ansible
-    ssh_port: "2222"
+#    admin_users:
+#      - ansible
 
   tasks:
     - name: Asegurar que todos los paquetes estén actualizados a la última versión de seguridad
@@ -23,7 +22,6 @@
         state: present
         validate: '/usr/sbin/sshd -t -f %s'
       loop:
-        - { regexp: '^#?Port ', line: 'Port {{ ssh_port }}' }
         - { regexp: '^#?PermitRootLogin ', line: 'PermitRootLogin no' }
         - { regexp: '^#?X11Forwarding ', line: 'X11Forwarding no' }
         - { regexp: '^#?MaxAuthTries ', line: 'MaxAuthTries 3' }
@@ -42,21 +40,6 @@
         state: started
         enabled: true
 
-    - name: Permitir el nuevo puerto SSH en el Firewall
-      firewalld:
-        port: "{{ ssh_port }}/tcp"
-        zone: public
-        permanent: true
-        state: enabled
-
-    - name: Remover el puerto SSH por defecto (22)
-      firewalld:
-        service: ssh
-        zone: public
-        permanent: true
-        state: disabled
-      when: ssh_port != "22"
-      notify: Reload Firewall
 
     - name: Asegurar que el servicio Auditd esté activo para auditoría de eventos
       systemd:
