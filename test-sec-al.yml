@@ -4,7 +4,7 @@
   become: true
   vars:
     admin_users:
-      - root
+      - ansible
     ssh_port: "2222"
 
   tasks:
