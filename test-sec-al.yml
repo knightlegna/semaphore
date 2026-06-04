@@ -46,3 +46,9 @@
         name: auditd
         state: started
         enabled: true
+        
+handlers:
+    - name: Restart SSH
+      systemd:
+        name: sshd
+        state: restarted
