@@ -46,15 +46,3 @@
         name: auditd
         state: started
         enabled: true
-
- 
-  handlers:
-    - name: Reiniciar SSH
-      systemd:
-        name: sshd
-        state: restarted
-
-    - name: Reload Firewall
-      systemd:
-        name: firewalld
-        state: reloaded
